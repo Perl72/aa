@@ -67,6 +67,14 @@ ul li a:hover {
     text-decoration: underline;
 }
 
+ol {
+    padding-left: 20px;
+}
+
+ol li {
+    margin: 10px 0;
+}
+
 /* Footer Styling */
 footer {
     text-align: center;
@@ -77,3 +85,4 @@ footer {
     bottom: 0;
     width: 100%;
 }
+
