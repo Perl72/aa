@@ -1,0 +1,19 @@
+AA::Altsteps - Access alternative 12-step programs in JSON format.
+
+This module provides access to various alternative 12-step recovery programs.
+The data is stored in JSON format and can be loaded via the `load_steps` method.
+
+AA-Altsteps/
+├── Changes
+├── data/
+│   └── altsteps.json
+├── lib/
+│   └── AA/
+│       └── Altsteps.pm
+├── Makefile.PL
+├── MANIFEST
+├── README
+└── t/
+    ├── 00-load.t
+    └── altsteps.t
+
