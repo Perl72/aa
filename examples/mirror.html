@@ -3,62 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>Altsteps</title>
-  <style>
-    body {
-      font-family: sans-serif;
-      margin: 2rem;
-      background-color: #f4f4f9;
-      color: #333;
-    }
-
-    h1 {
-      color: #2c3e50;
-      text-align: center;
-    }
-
-    .step-group {
-      border: 2px solid #3498db;
-      border-radius: 8px;
-      margin-bottom: 2rem;
-      padding: 1rem;
-      background-color: #ecf0f1;
-    }
-
-    .step-group h2 {
-      margin-top: 0;
-      color: #2980b9;
-    }
-
-    .steps-list {
-      padding-left: 1.5rem; /* Indent the list */
-      list-style-type: square;
-    }
-
-    #nav {
-      margin-bottom: 2rem;
-      padding: 1rem;
-      background-color: #2c3e50;
-      color: #ecf0f1;
-      border-radius: 8px;
-    }
-
-    #nav a {
-      display: block;
-      margin-bottom: 0.5rem;
-      text-decoration: none;
-      color: #ecf0f1;
-      font-weight: bold;
-    }
-
-    #nav a:hover {
-      text-decoration: underline;
-      color: #f39c12;
-    }
-
-    strong {
-      color: #e74c3c;
-    }
-  </style>
+  <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
   <h1>Alternative Steps and 2nd Tradition</h1>
@@ -74,12 +19,10 @@
 
   <script>
     async function loadSteps() {
-      // Fetch the JSON file
       const response = await fetch('../data/combined3.json');
       const container = document.getElementById('steps-container');
       const nav = document.getElementById('nav-links');
 
-      // Clear placeholder text in both sections
       container.innerHTML = '';
       nav.innerHTML = '';
 
@@ -88,42 +31,34 @@
         return;
       }
 
-      // Parse the JSON data
       const data = await response.json();
       const uniqueTitles = new Set();
 
-      // Loop over each "12 Steps" entry
       for (const [title, details] of Object.entries(data)) {
-        if (!title || !details || !details.steps || details.steps.length === 0 || uniqueTitles.has(title)) continue;
+        if (!title || !details || !details.steps || uniqueTitles.has(title)) continue;
         uniqueTitles.add(title);
 
-        // Create a unique ID for this group
         const id = title.replace(/\s+/g, '-').toLowerCase();
 
-        // Add to navigation menu
         const navLink = document.createElement('a');
         navLink.href = `#${id}`;
         navLink.textContent = title;
         nav.appendChild(navLink);
 
-        // Create a container for this group
         const groupDiv = document.createElement('div');
         groupDiv.className = 'step-group';
         groupDiv.id = id;
 
-        // Title
         const heading = document.createElement('h2');
         heading.textContent = title;
         groupDiv.appendChild(heading);
 
-        // Source
         if (details.source) {
           const sourcePara = document.createElement('p');
           sourcePara.innerHTML = `<strong>Source:</strong> ${details.source}`;
           groupDiv.appendChild(sourcePara);
         }
 
-        // Steps
         if (Array.isArray(details.steps)) {
           const stepsUl = document.createElement('ul');
           stepsUl.className = 'steps-list';
@@ -135,14 +70,12 @@
           groupDiv.appendChild(stepsUl);
         }
 
-        // Second Tradition
         if (details.second_tradition) {
           const stPara = document.createElement('p');
           stPara.innerHTML = `<strong>Second Tradition:</strong> ${details.second_tradition}`;
           groupDiv.appendChild(stPara);
         }
 
-        // Append the group to the main container
         container.appendChild(groupDiv);
       }
     }
