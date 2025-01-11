@@ -1,19 +1,61 @@
+# AA::Altsteps
+
 AA::Altsteps - Access alternative 12-step programs in JSON format.
 
 This module provides access to various alternative 12-step recovery programs.
-The data is stored in JSON format and can be loaded via the `load_steps` method.
+The data is stored in JSON format and can be loaded via the `load_steps` method for programmatic access. Additionally, sample HTML renderings are provided in the `examples/` directory to facilitate use in web applications.
 
+## Features
+- Comprehensive JSON file with data sourced from **aa-ao.org**.
+- Easily load and manipulate data using the `load_steps` method.
+- Example HTML files included for rendering JSON content.
+
+## Directory Structure
+```
 AA-Altsteps/
-├── Changes
+├── Changes              # Revision history
 ├── data/
-│   └── altsteps.json
+│   └── combined3.json   # JSON data file containing alternative 12-step programs
+├── examples/            # Sample HTML files for rendering data
+│   ├── index.html
+│   └── mirror.html
 ├── lib/
 │   └── AA/
-│       └── Altsteps.pm
-├── Makefile.PL
-├── MANIFEST
-├── README
-└── t/
-    ├── 00-load.t
-    └── altsteps.t
+│       └── Altsteps.pm  # Main module file
+├── Makefile.PL          # Build script
+├── MANIFEST             # File list
+├── README               # Overview of the project
+└── t/                   # Test files
+    ├── 00-load.t        # Basic load test
+    └── altsteps.t       # Tests for `load_steps` functionality
+```
+
+## Usage
+
+### Loading JSON Data
+```perl
+use AA::Altsteps;
+
+my $steps = AA::Altsteps->load_steps('data/altsteps.json');
+print "Loaded " . scalar(@$steps) . " programs\n";
+```
+
+### Viewing Example HTML
+To view the included HTML examples, open `examples/demo.html` in your web browser. This file demonstrates how to render the JSON data in a user-friendly format.
+
+## Installation
+To install this module, run:
+```sh
+perl Makefile.PL
+make
+make test
+make install
+```
+
+## Contributions
+Contributions are welcome! Feel free to submit issues or pull requests on GitHub.
+
+## License
+This module is free software and is released under the same terms as Perl itself.
+
 

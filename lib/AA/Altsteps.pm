@@ -6,7 +6,7 @@ use 5.006;
 use JSON;
 use File::Spec;
 
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 sub load_steps {
     my $class = shift;
@@ -31,7 +31,7 @@ AA::Altsteps - The great new AA::Altsteps!
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =cut
 

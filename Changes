@@ -1,7 +1,10 @@
-Revision history for AA-Altsteps
+# Revision History for AA-Altsteps
 
+## 0.02  2025-01-11
+- Added all content from **aa-ao.org** as a JSON file.
+- Included HTML examples in the `examples/` directory for rendering the JSON data.
+- Updated `README` to reflect the new features and directory structure.
 
-0.01  2025-01-08
-    - Initial release with `load_steps` functionality.
-
+## 0.01  2025-01-08
+- Initial release with `load_steps` functionality.
 
