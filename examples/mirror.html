@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Altsteps</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      margin: 2rem;
+    }
+    .step-group {
+      border: 1px solid #ccc;
+      margin-bottom: 2rem;
+      padding: 1rem;
+    }
+    .step-group h2 {
+      margin-top: 0;
+    }
+    .steps-list {
+      padding-left: 1.5rem; /* Indent the list */
+    }
+  </style>
+</head>
+<body>
+  <h1>Alternative Steps and 2nd Tradition </h1>
+  <div id="steps-container">Loading...</div>
+
+  <script>
+    async function loadSteps() {
+      // Fetch the JSON file
+      const response = await fetch('../data/combined3.json');
+      if (!response.ok) {
+        document.getElementById('steps-container').textContent =
+          'Error loading combined3.json';
+        return;
+      }
+
+      // Parse the JSON data
+      const data = await response.json();
+      const container = document.getElementById('steps-container');
+      container.innerHTML = ''; // Clear "Loading..." text
+
+      // Loop over each "12 Steps" entry
+      for (const [title, details] of Object.entries(data)) {
+        // Create a container for this group
+        const groupDiv = document.createElement('div');
+        groupDiv.className = 'step-group';
+
+        // Title
+        const heading = document.createElement('h2');
+        heading.textContent = title;
+        groupDiv.appendChild(heading);
+
+        // Source
+        if (details.source) {
+          const sourcePara = document.createElement('p');
+          sourcePara.innerHTML = `<strong>Source:</strong> ${details.source}`;
+          groupDiv.appendChild(sourcePara);
+        }
+
+        // Steps
+        if (Array.isArray(details.steps)) {
+          const stepsUl = document.createElement('ul');
+          stepsUl.className = 'steps-list';
+          details.steps.forEach(stepText => {
+            const li = document.createElement('li');
+            li.textContent = stepText;
+            stepsUl.appendChild(li);
+          });
+          groupDiv.appendChild(stepsUl);
+        }
+
+        // Second Tradition
+        if (details.second_tradition) {
+          const stPara = document.createElement('p');
+          stPara.innerHTML = `<strong>Second Tradition:</strong> ${details.second_tradition}`;
+          groupDiv.appendChild(stPara);
+        }
+
+        // Append the group to the main container
+        container.appendChild(groupDiv);
+      }
+    }
+
+    loadSteps();
+  </script>
+</body>
+</html>
+
