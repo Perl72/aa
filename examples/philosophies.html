@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alt Steps & 2nd Tradition</title>
+  <title>Alternative Steps and 2nd Tradition</title>
   <link rel="stylesheet" href="../css/styles.css">
 </head>
 <body>
@@ -19,6 +19,11 @@
   <div id="steps-container">Loading...</div>
 
   <script>
+    const files = [
+      "Alans_Twelve_Fucking_Steps.json",
+      "Beyond_Belief_Toronto_12_Steps.json"
+    ];
+
     async function loadPhilosophies() {
       const nav = document.getElementById('nav-links');
       const container = document.getElementById('steps-container');
@@ -27,16 +32,9 @@
       container.innerHTML = '';
 
       try {
-        // Fetch the altsteps.json file
-        const response = await fetch('../data/altsteps.json');
-        if (!response.ok) throw new Error('Failed to load altsteps.json');
-
-        const philosophies = await response.json();
-
-        // Populate navigation links and content
-        philosophies.forEach((file) => {
-          // Infer title from filename if no explicit title is provided
-          const inferredTitle = file.filename
+        // Loop through the hardcoded list of files
+        files.forEach((filename) => {
+          const inferredTitle = filename
             .replace(/_/g, ' ') // Replace underscores with spaces
             .replace(/\.json$/i, ''); // Remove the .json extension
 
@@ -46,7 +44,7 @@
           navLink.href = `#${inferredTitle.replace(/\s+/g, '-').toLowerCase()}`;
           navLink.onclick = async (e) => {
             e.preventDefault();
-            await loadDetails(file, inferredTitle);
+            await loadDetails(filename, inferredTitle);
           };
           nav.appendChild(navLink);
         });
@@ -56,14 +54,14 @@
       }
     }
 
-    async function loadDetails(file, inferredTitle) {
+    async function loadDetails(filename, inferredTitle) {
       const container = document.getElementById('steps-container');
       container.innerHTML = 'Loading...';
 
       try {
         // Fetch individual philosophy details
-        const response = await fetch(`../philosophies/${file.filename}`);
-        if (!response.ok) throw new Error(`Failed to load ${file.filename}`);
+        const response = await fetch(`../philosophies/${filename}`);
+        if (!response.ok) throw new Error(`Failed to load ${filename}`);
 
         const data = await response.json();
 
@@ -92,6 +90,7 @@
       }
     }
 
+    // Load the philosophies on page load
     loadPhilosophies();
   </script>
 </body>
