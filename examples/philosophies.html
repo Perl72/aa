@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Philosophies</title>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    /* Two-column layout for navigation */
+    #nav-links {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Philosophies and Alternative Steps</h1>
+
+  <!-- Navigation -->
+  <div id="nav">
+    <h3>Philosophies</h3>
+    <div id="nav-links">Loading...</div>
+  </div>
+
+  <!-- Details Section -->
+  <div id="details-container">
+    <h2 id="details-title">Select a Philosophy</h2>
+    <div id="details-content">Click on a philosophy to view details.</div>
+  </div>
+
+  <script>
+    async function loadPhilosophies() {
+      const response = await fetch('../data/altsteps.json');
+      const nav = document.getElementById('nav-links');
+      const detailsContainer = document.getElementById('details-content');
+      const detailsTitle = document.getElementById('details-title');
+
+      nav.innerHTML = '';
+      detailsContainer.innerHTML = '';
+
+      if (!response.ok) {
+        nav.textContent = 'Error loading philosophies.';
+        return;
+      }
+
+      const philosophies = await response.json();
+
+      philosophies.forEach((file) => {
+        const navLink = document.createElement('a');
+        navLink.textContent = file.title || 'Untitled';
+        navLink.href = "#";
+        navLink.onclick = async (e) => {
+          e.preventDefault();
+          const res = await fetch(`../philosophies/${file.filename}`);
+          if (!res.ok) {
+            detailsContainer.textContent = 'Error loading details.';
+            return;
+          }
+          const data = await res.json();
+          detailsTitle.textContent = file.title || 'Untitled';
+          detailsContainer.innerHTML = `
+            <h3>${data.title}</h3>
+            <p><strong>Source:</strong> ${data.source || 'Unknown'}</p>
+            <ul>${data.steps.map(step => `<li>${step}</li>`).join('')}</ul>
+          `;
+        };
+        nav.appendChild(navLink);
+      });
+    }
+
+    loadPhilosophies();
+  </script>
+</body>
+</html>

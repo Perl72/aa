@@ -11,24 +11,24 @@ The data is stored in JSON format and can be loaded via the `load_steps` method 
 - Example HTML files included for rendering JSON content.
 
 ## Directory Structure
-```
+
 AA-Altsteps/
-├── Changes              # Revision history
-├── data/
-│   └── combined3.json   # JSON data file containing alternative 12-step programs
-├── examples/            # Sample HTML files for rendering data
-│   ├── index.html
-│   └── mirror.html
+├── Changes
+├── chars.py
+├── README
+├── combined3.json
 ├── lib/
 │   └── AA/
-│       └── Altsteps.pm  # Main module file
-├── Makefile.PL          # Build script
-├── MANIFEST             # File list
-├── README               # Overview of the project
-└── t/                   # Test files
-    ├── 00-load.t        # Basic load test
-    └── altsteps.t       # Tests for `load_steps` functionality
-```
+├── t/
+│   ├── 00-load.t
+│   └── altsteps.t
+├── css/
+│   └── styles.css
+├── data/
+│   └── altsteps.json
+└── examples/
+    └── index.html
+
 
 ## Usage
 
