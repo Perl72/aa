@@ -1,20 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Philosophies</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alt Steps & 2nd Tradition</title>
   <link rel="stylesheet" href="../css/styles.css">
-  <style>
-    /* Two-column layout for navigation */
-    #nav-links {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-    }
-  </style>
 </head>
 <body>
-  <h1>Philosophies and Alternative Steps</h1>
+  <h1>Alternative Steps and 2nd Tradition</h1>
 
   <!-- Navigation -->
   <div id="nav">
@@ -22,53 +15,85 @@
     <div id="nav-links">Loading...</div>
   </div>
 
-  <!-- Details Section -->
-  <div id="details-container">
-    <h2 id="details-title">Select a Philosophy</h2>
-    <div id="details-content">Click on a philosophy to view details.</div>
-  </div>
+  <!-- Steps Content -->
+  <div id="steps-container">Loading...</div>
 
   <script>
     async function loadPhilosophies() {
-      const response = await fetch('../data/altsteps.json');
       const nav = document.getElementById('nav-links');
-      const detailsContainer = document.getElementById('details-content');
-      const detailsTitle = document.getElementById('details-title');
+      const container = document.getElementById('steps-container');
 
       nav.innerHTML = '';
-      detailsContainer.innerHTML = '';
+      container.innerHTML = '';
 
-      if (!response.ok) {
+      try {
+        // Fetch the altsteps.json file
+        const response = await fetch('../data/altsteps.json');
+        if (!response.ok) throw new Error('Failed to load altsteps.json');
+
+        const philosophies = await response.json();
+
+        // Populate navigation links and content
+        philosophies.forEach((file) => {
+          // Infer title from filename if no explicit title is provided
+          const inferredTitle = file.filename
+            .replace(/_/g, ' ') // Replace underscores with spaces
+            .replace(/\.json$/i, ''); // Remove the .json extension
+
+          // Create navigation link
+          const navLink = document.createElement('a');
+          navLink.textContent = inferredTitle;
+          navLink.href = `#${inferredTitle.replace(/\s+/g, '-').toLowerCase()}`;
+          navLink.onclick = async (e) => {
+            e.preventDefault();
+            await loadDetails(file, inferredTitle);
+          };
+          nav.appendChild(navLink);
+        });
+      } catch (error) {
         nav.textContent = 'Error loading philosophies.';
-        return;
+        console.error(error);
       }
+    }
 
-      const philosophies = await response.json();
+    async function loadDetails(file, inferredTitle) {
+      const container = document.getElementById('steps-container');
+      container.innerHTML = 'Loading...';
 
-      philosophies.forEach((file) => {
-        const navLink = document.createElement('a');
-        navLink.textContent = file.title || 'Untitled';
-        navLink.href = "#";
-        navLink.onclick = async (e) => {
-          e.preventDefault();
-          const res = await fetch(`../philosophies/${file.filename}`);
-          if (!res.ok) {
-            detailsContainer.textContent = 'Error loading details.';
-            return;
-          }
-          const data = await res.json();
-          detailsTitle.textContent = file.title || 'Untitled';
-          detailsContainer.innerHTML = `
-            <h3>${data.title}</h3>
+      try {
+        // Fetch individual philosophy details
+        const response = await fetch(`../philosophies/${file.filename}`);
+        if (!response.ok) throw new Error(`Failed to load ${file.filename}`);
+
+        const data = await response.json();
+
+        // Extract the steps from the nested key dynamically
+        const stepsKey = Object.keys(data).find(key => Array.isArray(data[key]));
+        const steps = stepsKey ? data[stepsKey] : [];
+
+        // Render philosophy details
+        container.innerHTML = `
+          <div class="step-group">
+            <h2>${stepsKey || inferredTitle}</h2>
             <p><strong>Source:</strong> ${data.source || 'Unknown'}</p>
-            <ul>${data.steps.map(step => `<li>${step}</li>`).join('')}</ul>
-          `;
-        };
-        nav.appendChild(navLink);
-      });
+            <ul class="steps-list">
+              ${steps.map(step => `<li>${step}</li>`).join('')}
+            </ul>
+            ${
+              data.second_tradition
+                ? `<p><strong>Second Tradition:</strong> ${data.second_tradition}</p>`
+                : ''
+            }
+          </div>
+        `;
+      } catch (error) {
+        container.innerHTML = 'Error loading details.';
+        console.error(error);
+      }
     }
 
     loadPhilosophies();
   </script>
 </body>
 </html>
+
